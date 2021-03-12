@@ -2,7 +2,7 @@ package com.mayandro.remote
 
 import com.mayandro.remote.model.SummaryResponse
 import com.mayandro.remote.retrofit.RetrofitApi
-import com.mayandro.remote.utils.safeApiCall
+import com.mayandro.remote.utils.ApiResponseHandler.safeApiCall
 import com.mayandro.utility.network.NetworkStatus
 
 class RemoteDataSourceImpl(

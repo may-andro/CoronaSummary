@@ -56,12 +56,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(), DashboardInt
     private fun handleUiState(networkStatus: NetworkStatus<SummaryResponse>) {
         when (networkStatus) {
             is NetworkStatus.Loading -> {
-                showAlertDialog(
-                    title = "Loading Data",
-                    message = "Loading Content",
-                    positiveButton = "",
-                    isCancellable = false
-                )
+                //showAlertDialog(title = "Loading Data", message = "Loading Content", positiveButton = "", isCancellable = false)
             }
             is NetworkStatus.Error -> {
                 showAlertDialog(
