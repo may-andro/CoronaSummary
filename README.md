@@ -21,5 +21,6 @@ https://dribbble.com/shots/10847147/attachments/2500285?mode=media
 <img width="476" alt="Screenshot 2021-03-12 at 10 51 40" src="https://user-images.githubusercontent.com/16761273/110923271-ffe01600-8320-11eb-81a7-d7d445c9fcba.png">
 <img width="475" alt="Screenshot 2021-03-12 at 10 51 49" src="https://user-images.githubusercontent.com/16761273/110923275-0078ac80-8321-11eb-9bf5-7b8cd37f323c.png">
 
-https://user-images.githubusercontent.com/16761273/110923606-606f5300-8321-11eb-8d2b-ac0f3cd41917.mov
-https://user-images.githubusercontent.com/16761273/110923890-ae845680-8321-11eb-845c-3d4b111074fa.mov
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/16761273/110925784-e7252f80-8323-11eb-80a7-4fe56e113b43.gif)
+![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/16761273/110925803-ebe9e380-8323-11eb-8adb-1c8932a830d4.gif)
+
