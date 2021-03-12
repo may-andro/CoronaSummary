@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        android:id="@+id/dashboardTransition"
+        app:constraintSetEnd="@+id/end"
+        app:constraintSetStart="@+id/start">
+
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorId="@id/scrollableContainer"
+            app:touchAnchorSide="top" />
+
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="0"
+                app:motionTarget="@id/imageSymptom" />
+
+            <KeyAttribute
+                app:framePosition="10"
+                app:motionTarget="@id/imageSymptom"
+                android:alpha="0.5" />
+
+            <KeyAttribute
+                app:framePosition="20"
+                app:motionTarget="@id/imageSymptom"
+                android:alpha="0" />
+
+            <KeyAttribute
+                app:framePosition="100"
+                app:motionTarget="@id/imageSymptom"
+                android:alpha="0" />
+        </KeyFrameSet>
+
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="0"
+                app:motionTarget="@id/textReadMore" />
+
+            <KeyAttribute
+                app:framePosition="10"
+                app:motionTarget="@id/textReadMore"
+                android:alpha="0.5" />
+
+            <KeyAttribute
+                app:framePosition="20"
+                app:motionTarget="@id/textReadMore"
+                android:alpha="0" />
+
+            <KeyAttribute
+                app:framePosition="100"
+                app:motionTarget="@id/textReadMore"
+                android:alpha="0" />
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@id/viewSymptomsBackground">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toStartOf="@id/guidelineRight"
+                app:layout_constraintHeight_percent="0.2"
+                app:layout_constraintStart_toEndOf="@id/guidelineLeft"
+                app:layout_constraintTop_toTopOf="@+id/guideline10" />
+            <CustomAttribute
+                app:attributeName="radius"
+                app:customDimension="24dp"
+                />
+            <CustomAttribute
+                app:attributeName="cardBackgroundColor"
+                app:customColorValue="@color/colorPrimaryLight"/>
+        </Constraint>
+
+        <Constraint android:id="@id/textSymptom">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/textReadMore"
+                app:layout_constraintEnd_toStartOf="@id/guidelineRight"
+                app:layout_constraintStart_toStartOf="@id/guidelineCenter"
+                app:layout_constraintTop_toTopOf="@id/viewSymptomsBackground"
+                app:layout_constraintWidth_percent="0.4" />
+            <CustomAttribute
+                app:attributeName="textColor"
+                app:customColorValue="@color/colorPrimaryDark" />
+        </Constraint>
+
+        <Constraint android:id="@id/imageInfo">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <PropertySet
+                android:alpha="0"/>
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@id/viewSymptomsBackground">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                app:attributeName="radius"
+                app:customDimension="0dp" />
+            <CustomAttribute
+                app:attributeName="cardBackgroundColor"
+                app:customColorValue="@color/colorPrimaryDark"/>
+        </Constraint>
+
+        <Constraint android:id="@id/textSymptom">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/viewSymptomsBackground"
+                app:layout_constraintStart_toEndOf="@id/guidelineLeft"
+                app:layout_constraintTop_toTopOf="@+id/viewSymptomsBackground"
+                app:layout_constraintEnd_toEndOf="@id/guidelineRight"/>
+            <CustomAttribute
+                app:attributeName="textColor"
+                app:customColorValue="@color/white" />
+        </Constraint>
+
+        <Constraint android:id="@id/imageInfo">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@id/guidelineRight"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <PropertySet
+                android:alpha="1" />
+        </Constraint>
+    </ConstraintSet>
+
+</MotionScene>

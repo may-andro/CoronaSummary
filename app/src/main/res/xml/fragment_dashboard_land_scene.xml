@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <Transition
+        android:id="@+id/nestedScrollViewTransition"
+        app:constraintSetEnd="@+id/end"
+        app:constraintSetStart="@+id/start">
+
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorId="@id/scrollableContainer"
+            app:touchAnchorSide="top" />
+
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="0"
+                app:motionTarget="@id/imageSymptom" />
+
+            <KeyAttribute
+                android:alpha="0.5"
+                app:framePosition="10"
+                app:motionTarget="@id/imageSymptom" />
+
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="20"
+                app:motionTarget="@id/imageSymptom" />
+
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="100"
+                app:motionTarget="@id/imageSymptom" />
+        </KeyFrameSet>
+
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="0"
+                app:motionTarget="@id/textReadMore" />
+
+            <KeyAttribute
+                android:alpha="0.5"
+                app:framePosition="10"
+                app:motionTarget="@id/textReadMore" />
+
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="20"
+                app:motionTarget="@id/textReadMore" />
+
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="100"
+                app:motionTarget="@id/textReadMore" />
+        </KeyFrameSet>
+
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="0"
+                app:motionTarget="@id/textSymptom" />
+
+            <KeyAttribute
+                android:alpha="0.5"
+                app:framePosition="10"
+                app:motionTarget="@id/textSymptom" />
+
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="20"
+                app:motionTarget="@id/textSymptom" />
+
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="100"
+                app:motionTarget="@id/textSymptom" />
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@id/viewSymptomsBackground">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+                app:layout_constraintHeight_percent="0.35"
+                app:layout_constraintStart_toEndOf="@id/guidelineLeft"
+                app:layout_constraintTop_toTopOf="@+id/guideline10" />
+            <CustomAttribute
+                app:attributeName="radius"
+                app:customDimension="24dp" />
+            <CustomAttribute
+                app:attributeName="cardBackgroundColor"
+                app:customColorValue="@color/colorPrimaryLight" />
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@id/viewSymptomsBackground">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+                app:layout_constraintHeight_percent="0.35"
+                app:layout_constraintStart_toEndOf="@id/guidelineLeft"
+                app:layout_constraintBottom_toTopOf="parent" />
+            <CustomAttribute
+                app:attributeName="radius"
+                app:customDimension="0dp" />
+            <CustomAttribute
+                app:attributeName="cardBackgroundColor"
+                app:customColorValue="@color/transparent" />
+        </Constraint>
+    </ConstraintSet>
+
+
+
+    <Transition
+        android:id="@+id/recyclerViewTransition"
+        app:constraintSetEnd="@+id/recyclerViewEnding"
+        app:constraintSetStart="@+id/recyclerViewBeginning">
+
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorId="@id/recyclerViewCountries"
+            app:touchAnchorSide="top" />
+
+    </Transition>
+
+    <ConstraintSet android:id="@+id/recyclerViewBeginning">
+        <Constraint android:id="@id/textViewAllCountries">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/guidelineCenter"
+                app:layout_constraintTop_toBottomOf="@id/guidelineTop" />
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/recyclerViewEnding">
+        <Constraint android:id="@id/textViewAllCountries">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toEndOf="@id/guidelineCenter"
+                app:layout_constraintBottom_toTopOf="parent" />
+        </Constraint>
+    </ConstraintSet>
+
+
+
+
+
+
+</MotionScene>

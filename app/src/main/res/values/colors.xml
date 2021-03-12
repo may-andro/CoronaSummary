@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="colorPrimaryDark">#1F6357</color>
+    <color name="colorAccent">#FC2F2F</color>
+    <color name="colorPrimaryLight">#ECF4F3</color>
+    <color name="transparent">#00000000</color>
+    <color name="screen_background_white">#fff</color>
+
+    <color name="colorPrimary">#348A7B</color>
+    <color name="colorPrimaryVariant">#1F6357</color>
+
+    <color name="colorSecondary">#14A98E</color>
+    <color name="colorSecondaryVariant">#008289</color>
+
+    <color name="colorPrimaryMedium">#91B6AF</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="brown">#501515</color>
+    <color name="textColorGrey">#848686</color>
+
+    <array name="color_list">
+        <item>#1F6357</item>
+        <item>#1BB65D</item>
+        <item>#53A495</item>
+        <item>#1F6357</item>
+        <item>#3E2D4A</item>
+        <item>#D39D87</item>
+        <item>#E43D4C</item>
+        <item>#501515</item>
+        <item>#75B6AA</item>
+        <item>#11463C</item>
+        <item>#BF7B5F</item>
+        <item>#46467F</item>
+        <item>#FF8367</item>
+        <item>#FFD362</item>
+        <item>#DF9F85</item>
+        <item>#BF7B5F</item>
+    </array>
+</resources>

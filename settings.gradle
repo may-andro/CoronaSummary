@@ -1,0 +1,7 @@
+include ':domain'
+include ':datasource'
+include ':utility'
+include ':remote'
+include ':local'
+include ':app'
+rootProject.name = "CoronaSummary"

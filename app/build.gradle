@@ -1,0 +1,90 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id "kotlin-kapt"
+    id "androidx.navigation.safeargs.kotlin"
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.mayandro.coronasummary"
+        minSdkVersion 23
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(path: ':utility')
+    implementation project(path: ':datasource')
+    implementation project(path: ':remote')
+    implementation project(path: ':domain')
+    implementation project(path: ':local')
+
+    //Android
+    def androidDependencies = rootProject.ext.androidDependencies
+    implementation androidDependencies.appcompat
+    implementation androidDependencies.constraintlayout
+    implementation androidDependencies.material
+    implementation androidDependencies.palette
+
+    // Kotlin
+    def kotlinDependencies = rootProject.ext.kotlinDependencies
+    implementation kotlinDependencies.kotlin
+    implementation kotlinDependencies.coroutines
+    implementation kotlinDependencies.ktx
+
+    //LifeCycle
+    def lifecycleDependencies = rootProject.ext.lifecycleDependencies
+    implementation lifecycleDependencies.lifecycleViewmodelKtx
+    implementation lifecycleDependencies.lifecycleLivedataKtx
+    implementation lifecycleDependencies.lifecycleViewmodelSavedState
+
+    // Navigation
+    def navigationDependencies = rootProject.ext.navigationDependencies
+    implementation navigationDependencies.navigationFragment
+    implementation navigationDependencies.navigationUiKtx
+    implementation navigationDependencies.navigationDynamicFeatures
+    androidTestImplementation navigationDependencies.navigationTesting
+
+    def koinDependencies = rootProject.ext.koinDependencies
+    implementation koinDependencies.koin
+    implementation koinDependencies.koinViewmodel
+    implementation koinDependencies.koinFragment
+    implementation koinDependencies.koinScope
+    implementation koinDependencies.koinWorkManager
+
+    def chartDependencies = rootProject.ext.chartDependencies
+    implementation chartDependencies.mpAndroidChart
+
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
+    implementation 'com.github.KaKaVip:Android-Flag-Kit:v0.1'
+}
