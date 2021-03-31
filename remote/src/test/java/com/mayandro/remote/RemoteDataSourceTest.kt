@@ -15,25 +15,27 @@ import retrofit2.Response
 
 @RunWith(JUnit4::class)
 class RemoteDataSourceTest {
-    private val summaryResponse = SummaryResponse(
-        countries = listOf(),
-        date = "",
-        global = GlobalSummary(
-            newConfirmed = 0,
-            newDeaths = 0,
-            newRecovered = 0,
-            totalConfirmed = 0,
-            totalDeaths = 0,
-            totalRecovered = 0,
-            date = ""
-        )
-    )
 
-    private val networkSummaryResponse = NetworkStatus.Success(summaryResponse)
+    private val remoteDataSource = mockk<RemoteDataSourceImpl>()
 
     @Test
-    fun getSummaryResponse() {
-        val remoteDataSource = mockk<RemoteDataSourceImpl>()
+    fun remoteDataSource_getSummaryResponse_resultSuccess() {
+        val summaryResponse = SummaryResponse(
+            countrySummaries = listOf(),
+            date = "",
+            global = GlobalSummary(
+                newConfirmed = 0,
+                newDeaths = 0,
+                newRecovered = 0,
+                totalConfirmed = 0,
+                totalDeaths = 0,
+                totalRecovered = 0,
+                date = ""
+            )
+        )
+
+        val networkSummaryResponse = NetworkStatus.Success(summaryResponse)
+
         //STUB calls
         coEvery { remoteDataSource.getSummaryResponse() } returns networkSummaryResponse
 
@@ -47,39 +49,32 @@ class RemoteDataSourceTest {
     }
 
     @Test
-    fun testSafeApiCallSuccessfull() {
-        mockkObject(ApiResponseHandler)
+    fun remoteDataSource_getSummaryResponse_resultFailed() {
+        val summaryResponse = SummaryResponse(
+            countrySummaries = listOf(),
+            date = "",
+            global = GlobalSummary(
+                newConfirmed = 0,
+                newDeaths = 0,
+                newRecovered = 0,
+                totalConfirmed = 0,
+                totalDeaths = 0,
+                totalRecovered = 0,
+                date = ""
+            )
+        )
 
-        val apiRequest = mockk<Response<SummaryResponse>>()
-
-        val expectedResponse =  NetworkStatus.Success(summaryResponse)
-
-        //STUB calls
-        every { apiRequest.body() } returns summaryResponse
-        every { apiRequest.isSuccessful } returns true
-        coEvery { ApiResponseHandler.safeApiCall{ apiRequest } } returns expectedResponse
-
-        val result = runBlocking { ApiResponseHandler.safeApiCall{ apiRequest } }
-
-        assertEquals(expectedResponse.data, result.data)
-    }
-
-    @Test
-    fun testSafeApiCallFailed() {
-        mockkObject(ApiResponseHandler)
-
-        val apiRequest = mockk<Response<SummaryResponse>>()
-
-        val expectedResponse =  NetworkStatus.Error(UNKNOWN_NETWORK_EXCEPTION, data = summaryResponse)
+        val networkSummaryResponse = NetworkStatus.Error(errorMessage = UNKNOWN_NETWORK_EXCEPTION, summaryResponse)
 
         //STUB calls
-        every { apiRequest.isSuccessful } returns false
-        coEvery { ApiResponseHandler.safeApiCall{ apiRequest } } returns expectedResponse
+        coEvery { remoteDataSource.getSummaryResponse() } returns networkSummaryResponse
 
         //Execute the code
-        val result = runBlocking { ApiResponseHandler.safeApiCall{ apiRequest } }
+        val result = runBlocking { remoteDataSource.getSummaryResponse() }
 
         //Verify
-        assertEquals(expectedResponse.errorMessage, result.errorMessage)
+        coVerify { remoteDataSource.getSummaryResponse() }
+
+        assertEquals(networkSummaryResponse, result)
     }
 }

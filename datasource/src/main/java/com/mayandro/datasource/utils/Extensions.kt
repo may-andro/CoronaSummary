@@ -2,7 +2,7 @@ package com.mayandro.datasource.utils
 
 import com.mayandro.local.entity.CountrySummaryEntity
 import com.mayandro.local.entity.GlobalSummaryEntity
-import com.mayandro.remote.model.Country
+import com.mayandro.remote.model.CountrySummary
 import com.mayandro.remote.model.GlobalSummary
 
 fun GlobalSummaryEntity.toGlobalSummary(): GlobalSummary {
@@ -29,16 +29,16 @@ fun GlobalSummary.toGlobalSummary(): GlobalSummaryEntity {
     )
 }
 
-fun List<CountrySummaryEntity>.toCountryList(): List<Country> {
-    val list = mutableListOf<Country>()
+fun List<CountrySummaryEntity>.toCountryList(): List<CountrySummary> {
+    val list = mutableListOf<CountrySummary>()
     this.forEach {
         list.add(it.toCountry())
     }
     return list
 }
 
-fun CountrySummaryEntity.toCountry(): Country {
-    return Country(
+fun CountrySummaryEntity.toCountry(): CountrySummary {
+    return CountrySummary(
         id = this.id,
         country = this.country,
         countryCode = this.countryCode,
@@ -53,7 +53,7 @@ fun CountrySummaryEntity.toCountry(): Country {
     )
 }
 
-fun List<Country>.toCountrySummaryEntityList(): List<CountrySummaryEntity> {
+fun List<CountrySummary>.toCountrySummaryEntityList(): List<CountrySummaryEntity> {
     val list = mutableListOf<CountrySummaryEntity>()
     this.forEach {
         list.add(it.toCountrySummaryEntity())
@@ -61,7 +61,7 @@ fun List<Country>.toCountrySummaryEntityList(): List<CountrySummaryEntity> {
     return list
 }
 
-fun Country.toCountrySummaryEntity(): CountrySummaryEntity {
+fun CountrySummary.toCountrySummaryEntity(): CountrySummaryEntity {
     return CountrySummaryEntity(
         id = this.id,
         country = this.country,

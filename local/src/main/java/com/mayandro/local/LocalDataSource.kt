@@ -15,7 +15,7 @@ interface LocalDataSource {
 
     suspend fun getGlobalSummaryByDate(date: String): GlobalSummaryEntity?
 
-    suspend fun insertCountrySummary(countrySummaryEntity: CountrySummaryEntity)
+    suspend fun insertCountrySummary(countrySummaryEntity: List<CountrySummaryEntity>)
 
     suspend fun deleteAllCountrySummary()
 

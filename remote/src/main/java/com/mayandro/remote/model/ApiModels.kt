@@ -2,7 +2,7 @@ package com.mayandro.remote.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Country(
+data class CountrySummary(
     @SerializedName("ID") val id: String,
     @SerializedName("Country") val country: String,
     @SerializedName("CountryCode") val countryCode: String,
@@ -28,6 +28,6 @@ data class GlobalSummary(
 
 data class SummaryResponse(
     @SerializedName("Global") val global: GlobalSummary,
-    @SerializedName("Countries") val countries: List<Country>,
+    @SerializedName("Countries") val countrySummaries: List<CountrySummary>,
     @SerializedName("Date") val date: String
 )

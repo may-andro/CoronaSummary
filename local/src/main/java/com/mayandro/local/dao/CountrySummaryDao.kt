@@ -7,7 +7,7 @@ import com.mayandro.local.utils.DbConstants
 @Dao
 interface CountrySummaryDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCountrySummary(countrySummaryEntity: CountrySummaryEntity)
+    suspend fun insertCountrySummary(countrySummaryEntity: List<CountrySummaryEntity>)
 
     @Update
     suspend fun updateCountrySummary(countrySummaryEntity: CountrySummaryEntity)

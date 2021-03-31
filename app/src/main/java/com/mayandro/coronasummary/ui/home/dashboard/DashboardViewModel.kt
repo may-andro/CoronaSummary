@@ -7,7 +7,7 @@ import com.mayandro.coronasummary.ui.base.BaseViewModel
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardCountryModel
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardSummaryModel
 import com.mayandro.domain.usecase.GetCoronaSummaryUseCase
-import com.mayandro.remote.model.Country
+import com.mayandro.remote.model.CountrySummary
 import com.mayandro.remote.model.GlobalSummary
 import com.mayandro.remote.model.SummaryResponse
 import com.mayandro.utility.extensions.getRoughNumber
@@ -36,7 +36,7 @@ class DashboardViewModel(
     fun getUiData(summaryResponse: SummaryResponse, onResult: (List<DashboardSummaryModel>, List<DashboardCountryModel>) -> Unit) {
         viewModelScope.launch {
             val globalSummary = getPagerUiDataList(summaryResponse.global)
-            val counties = getRecyclerViewListFlow(summaryResponse.countries)
+            val counties = getRecyclerViewListFlow(summaryResponse.countrySummaries)
 
             globalSummary.zip(counties) { globalSUmmary, countryList ->
                 Pair(globalSUmmary, countryList)
@@ -77,10 +77,10 @@ class DashboardViewModel(
         }.flowOn(Dispatchers.Default)
     }
 
-    private fun getRecyclerViewListFlow(countryList: List<Country>): Flow<List<DashboardCountryModel>> {
+    private fun getRecyclerViewListFlow(countrySummaryList: List<CountrySummary>): Flow<List<DashboardCountryModel>> {
         return flow{
             val random = Random()
-            val sortedList = countryList.sortedByDescending { it.totalConfirmed }
+            val sortedList = countrySummaryList.sortedByDescending { it.totalConfirmed }
             val list = sortedList.map {
                 val colorsList = resource.getIntArray(R.array.color_list)
                 DashboardCountryModel(

@@ -13,8 +13,10 @@ object ApiResponseHandler {
         try {
             val response = call()
             if (response.isSuccessful) {
-                if (response.body() != null) {
+                response.body()?.let {
                     return NetworkStatus.Success(response.body())
+                } ?: kotlin.run {
+                    return NetworkStatus.Error(NULL_RESPONSE_BODY)
                 }
             }
             return NetworkStatus.Error(response.message())
