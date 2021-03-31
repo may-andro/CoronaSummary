@@ -30,7 +30,7 @@ class LocalDataSourceImpl(
         return globalSummaryDao.getGlobalSummaryByDate(date)
     }
 
-    override suspend fun insertCountrySummary(countrySummaryEntity: CountrySummaryEntity){
+    override suspend fun insertCountrySummary(countrySummaryEntity: List<CountrySummaryEntity>){
         countrySummaryDao.insertCountrySummary(countrySummaryEntity)
     }
 

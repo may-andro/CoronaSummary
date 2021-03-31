@@ -1,5 +1,7 @@
 package com.mayandro.remote
 
+import com.mayandro.remote.model.CountrySummary
+import com.mayandro.remote.model.GlobalSummary
 import com.mayandro.remote.model.SummaryResponse
 import com.mayandro.remote.retrofit.RetrofitApi
 import com.mayandro.remote.utils.ApiResponseHandler.safeApiCall
@@ -11,6 +13,25 @@ class RemoteDataSourceImpl(
     override suspend fun getSummaryResponse(): NetworkStatus<SummaryResponse> {
         return safeApiCall {
             retrofit.getSummary()
+        }
+    }
+
+    override suspend fun getWorldCoronaSummary(
+        from: String?,
+        to: String?
+    ): NetworkStatus<List<GlobalSummary>> {
+        return safeApiCall {
+            retrofit.getWorldCoronaSummary(from, to)
+        }
+    }
+
+    override suspend fun getCountryCoronaSummary(
+        countrySlug: String,
+        from: String?,
+        to: String?
+    ): NetworkStatus<List<CountrySummary>> {
+        return safeApiCall {
+            retrofit.getCountryCoronaSummary(countrySlug, from, to)
         }
     }
 }

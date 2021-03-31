@@ -49,5 +49,5 @@ dependencies {
     def testDependencies = rootProject.ext.testDependencies
     testImplementation testDependencies.junit
     testImplementation testDependencies.truth
-    testImplementation testDependencies.mockito
+    testImplementation testDependencies.mockk
 }

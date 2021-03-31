@@ -1,10 +1,7 @@
 package com.mayandro.domain.repository
 
 import com.mayandro.datasource.factory.DataSourceFactory
-import com.mayandro.datasource.utils.getDataAndCacheIt
-import com.mayandro.datasource.utils.toCountryList
-import com.mayandro.datasource.utils.toCountrySummaryEntityList
-import com.mayandro.datasource.utils.toGlobalSummary
+import com.mayandro.datasource.utils.*
 import com.mayandro.remote.model.SummaryResponse
 import com.mayandro.utility.dataandtime.getTimeDifference
 import com.mayandro.utility.dataandtime.getTimeLong
@@ -19,7 +16,7 @@ class CoronaSummaryRepositoryImpl (
 ): CoronaSummaryRepository {
 
     override suspend fun getCoronaSummary(): Flow<NetworkStatus<SummaryResponse>> {
-        return getDataAndCacheIt(
+        return DataCacheHelper.getDataAndCacheIt(
             query = {
                 querySummaryResponseFromDb()
             },
@@ -53,7 +50,7 @@ class CoronaSummaryRepositoryImpl (
         } else {
             val summaryResponse = SummaryResponse(
                 global = lastGlobalSummary.toGlobalSummary(),
-                countries = allCountrySummary.toCountryList(),
+                countrySummaries = allCountrySummary.toCountryList(),
                 date = lastGlobalSummary.date
             )
 
@@ -64,9 +61,7 @@ class CoronaSummaryRepositoryImpl (
     private suspend fun insertGlobalSummaryInDb(summaryResponse: SummaryResponse?) {
         summaryResponse?.let { data ->
             dataSourceFactory.retrieveLocalDataStore().insertGlobalSummary(data.global.toGlobalSummary())
-            data.countries.toCountrySummaryEntityList().forEach { item ->
-                dataSourceFactory.retrieveLocalDataStore().insertCountrySummary(item)
-            }
+            dataSourceFactory.retrieveLocalDataStore().insertCountrySummary(data.countrySummaries.toCountrySummaryEntityList())
         }
     }
 }

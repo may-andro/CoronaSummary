@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mayandro.coronasummary.R
@@ -16,9 +15,6 @@ import com.mayandro.coronasummary.ui.home.dashboard.adapter.SummaryAdapter
 import com.mayandro.remote.model.SummaryResponse
 import com.mayandro.utility.extensions.showToast
 import com.mayandro.utility.network.NetworkStatus
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.zip
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardFragment : BaseFragment<FragmentDashboardBinding>(), DashboardInteractor {
