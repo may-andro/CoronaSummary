@@ -32,15 +32,14 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChartTop"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/ic_red_graph"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginHorizontal="16dp"
-            app:layout_constraintWidth_percent="0.4"/>
+            app:layout_constraintWidth_percent="0.45"/>
 
         <TextView
             android:id="@+id/textViewTopLabel"
@@ -92,15 +91,14 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
         app:layout_constraintTop_toBottomOf="@+id/containerTop">
 
-        <ImageView
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChartBottom"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/ic_green_graph"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginHorizontal="16dp"
-            app:layout_constraintWidth_percent="0.4"/>
+            app:layout_constraintWidth_percent="0.45"/>
 
         <TextView
             android:id="@+id/textViewBottomLabel"

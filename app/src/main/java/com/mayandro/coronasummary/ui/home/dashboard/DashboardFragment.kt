@@ -11,13 +11,14 @@ import com.mayandro.coronasummary.R
 import com.mayandro.coronasummary.databinding.FragmentDashboardBinding
 import com.mayandro.coronasummary.ui.base.BaseFragment
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.CountryAdapter
+import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardCountryModel
+import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardSummaryModel
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.SummaryAdapter
-import com.mayandro.remote.model.SummaryResponse
-import com.mayandro.utility.extensions.showToast
+import com.mayandro.utility.extensions.showShortToast
 import com.mayandro.utility.network.NetworkStatus
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DashboardFragment : BaseFragment<FragmentDashboardBinding>(), DashboardInteractor {
+class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
     private val dashboardViewModel: DashboardViewModel by viewModel()
 
     private var isPortrait: Boolean = true
@@ -37,22 +38,23 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(), DashboardInt
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dashboardViewModel.viewInteractor = this
-
-        dashboardViewModel.getCoronaSummary()
 
         setUpCountryRecyclerView()
         setUpPagerView()
 
-        dashboardViewModel.summaryResponseLiveData.observe(viewLifecycleOwner) {
-            handleUiState(it)
+        dashboardViewModel.countriesUiListLiveData.observe(viewLifecycleOwner) {
+            handleListUiState(it)
+        }
+
+        dashboardViewModel.globalUiListLiveData.observe(viewLifecycleOwner) {
+            handlePagerUiState(it)
         }
     }
 
-    private fun handleUiState(networkStatus: NetworkStatus<SummaryResponse>) {
+    private fun handlePagerUiState(networkStatus: NetworkStatus<List<DashboardSummaryModel>>) {
         when (networkStatus) {
             is NetworkStatus.Loading -> {
-                //showAlertDialog(title = "Loading Data", message = "Loading Content", positiveButton = "", isCancellable = false)
+                requireActivity().showShortToast("Loading")
             }
             is NetworkStatus.Error -> {
                 showAlertDialog(
@@ -64,27 +66,50 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(), DashboardInt
                     },
                     negativeButton = "Retry",
                     negativeButtonClickListener = {
-                        dashboardViewModel.getCoronaSummary()
                     },
                     isCancellable = false
                 )
             }
             is NetworkStatus.Success -> {
-                alertDialog.dismissDialog()
-                showSuccessUiData(networkStatus.data)
+                requireActivity().showShortToast("Success")
             }
+        }
+
+        networkStatus.data?.let { list ->
+            (binding.viewPagerSummary.adapter as SummaryAdapter).dataSet = list
         }
     }
 
-    private fun showSuccessUiData(summaryResponse: SummaryResponse?) {
-        summaryResponse?.let {
-            dashboardViewModel.getUiData(it) { pagerList, recyclerViewList ->
-                (binding.viewPagerSummary.adapter as SummaryAdapter).dataSet = pagerList
-                (binding.recyclerViewCountries.adapter as CountryAdapter).dataSet = recyclerViewList
+    private fun handleListUiState(networkStatus: NetworkStatus<List<DashboardCountryModel>>) {
+        when (networkStatus) {
+            is NetworkStatus.Loading -> {
+                requireActivity().showShortToast("Loading")
             }
+            is NetworkStatus.Error -> {
+                showAlertDialog(
+                    title = "Error",
+                    message = networkStatus.errorMessage?: "Error happened",
+                    positiveButton = "Terminate App",
+                    positiveButtonClickListener = {
+                        requireActivity().finish()
+                    },
+                    negativeButton = "Retry",
+                    negativeButtonClickListener = {
+                    },
+                    isCancellable = false
+                )
+            }
+            is NetworkStatus.Success -> {
+                requireActivity().showShortToast("Success")
+            }
+        }
+
+        networkStatus.data?.let { list ->
+            (binding.recyclerViewCountries.adapter as CountryAdapter).dataSet = list
         }
     }
 
+    //Setup View
     private fun setUpPagerView() {
         binding.viewPagerSummary.apply {
             isUserInputEnabled = false
@@ -119,10 +144,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(), DashboardInt
         }
     }
 
-    override fun showAlert(message: String) {
-        requireActivity().showToast(message)
-    }
-
+    //Dialogs
     private fun showAlertDialog(
         title: String,
         message: String,

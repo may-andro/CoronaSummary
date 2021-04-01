@@ -1,5 +1,5 @@
 package com.mayandro.coronasummary.ui.home
 
-import com.mayandro.coronasummary.ui.base.BaseViewModel
+import androidx.lifecycle.ViewModel
 
-class HomeViewModel (): BaseViewModel<HomeViewInteractor>()
+class HomeViewModel (): ViewModel()

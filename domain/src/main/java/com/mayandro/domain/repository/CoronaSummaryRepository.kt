@@ -1,9 +1,31 @@
 package com.mayandro.domain.repository
 
+import com.mayandro.local.entity.CountrySummaryEntity
+import com.mayandro.local.entity.GlobalSummaryEntity
+import com.mayandro.remote.model.CountrySummary
+import com.mayandro.remote.model.GlobalSummary
 import com.mayandro.remote.model.SummaryResponse
 import com.mayandro.utility.network.NetworkStatus
-import kotlinx.coroutines.flow.Flow
 
 interface CoronaSummaryRepository {
-    suspend fun getCoronaSummary(): Flow<NetworkStatus<SummaryResponse>>
+    suspend fun getCoronaSummary(): NetworkStatus<SummaryResponse>
+
+    suspend fun getGlobalCoronaSummary(
+        from: String?,
+        to: String?
+    ): NetworkStatus<List<GlobalSummary>>
+
+    suspend fun getCountryCoronaSummary(
+        countrySlug: String,
+        from: String?,
+        to: String?
+    ): NetworkStatus<List<CountrySummary>>
+
+    suspend fun getGlobalSummaryFromDb(): List<GlobalSummaryEntity>
+
+    suspend fun getCountrySummaryListFromDb(): List<CountrySummaryEntity>
+
+    suspend fun insertCountrySummary(countrySummaryEntity: List<CountrySummaryEntity>)
+
+    suspend fun insertGlobalSummary(list: List<GlobalSummaryEntity>)
 }

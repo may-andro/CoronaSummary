@@ -11,7 +11,11 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestOptions
 
-fun Context.showToast(message: String) {
+fun Context.showLongToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun Context.showShortToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
 

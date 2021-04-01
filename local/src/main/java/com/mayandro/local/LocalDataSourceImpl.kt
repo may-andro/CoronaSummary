@@ -10,8 +10,8 @@ class LocalDataSourceImpl(
     private val countrySummaryDao: CountrySummaryDao,
     private val globalSummaryDao: GlobalSummaryDao,
 ): LocalDataSource {
-    override suspend fun insertGlobalSummary(globalSummaryEntity: GlobalSummaryEntity) {
-        globalSummaryDao.insertGlobalSummary(globalSummaryEntity)
+    override suspend fun insertGlobalSummary(list: List<GlobalSummaryEntity>) {
+        globalSummaryDao.insertGlobalSummary(list)
     }
 
     override suspend fun deleteAllGlobalSummary() {

@@ -8,7 +8,7 @@ import com.mayandro.local.utils.DbConstants
 interface GlobalSummaryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGlobalSummary(globalSummaryEntity: GlobalSummaryEntity)
+    suspend fun insertGlobalSummary(list: List<GlobalSummaryEntity>)
 
     @Update
     suspend fun updateGlobalSummary(globalSummaryEntity: GlobalSummaryEntity)

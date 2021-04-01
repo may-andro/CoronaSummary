@@ -6,13 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mayandro.coronasummary.R
 import com.mayandro.coronasummary.databinding.LayoutGlobalSummaryBinding
 import com.mayandro.coronasummary.utils.AutoUpdatableAdapter
+import com.mayandro.coronasummary.utils.ChartUtils
 import kotlin.properties.Delegates
 
 class SummaryAdapter : RecyclerView.Adapter<SummaryAdapter.ViewHolder>(), AutoUpdatableAdapter {
 
-    var dataSet: List<DashboardSummaryModel> by Delegates.observable(emptyList()) {
-            _, old, new ->
-        autoNotify(old, new ) { o, n ->
+    var dataSet: List<DashboardSummaryModel> by Delegates.observable(emptyList()) { _, old, new ->
+        autoNotify(old, new) { o, n ->
             o == n
         }
     }
@@ -36,6 +36,8 @@ class SummaryAdapter : RecyclerView.Adapter<SummaryAdapter.ViewHolder>(), AutoUp
         private val binding: LayoutGlobalSummaryBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
+            ChartUtils.setUpChart(binding.lineChartTop)
+            ChartUtils.setUpChart(binding.lineChartBottom)
             binding.root.setOnClickListener {
             }
         }
@@ -49,6 +51,21 @@ class SummaryAdapter : RecyclerView.Adapter<SummaryAdapter.ViewHolder>(), AutoUp
 
             binding.circularProgressBar.progress = summaryModel.percentage
             binding.textPercentage.text = "${summaryModel.percentage}%"
+
+            ChartUtils.fillChart(
+                binding.lineChartTop,
+                summaryModel.chartData1,
+                summaryModel.label1,
+                R.color.graphRed,
+                R.drawable.red_graph_gradient
+            )
+            ChartUtils.fillChart(
+                binding.lineChartBottom,
+                summaryModel.chartData2,
+                summaryModel.label2,
+                R.color.graphGreen,
+                R.drawable.green_graph_gradient
+            )
         }
     }
 

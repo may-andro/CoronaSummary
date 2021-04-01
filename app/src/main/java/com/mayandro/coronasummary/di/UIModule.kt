@@ -11,5 +11,5 @@ val uiModule = module {
 
     viewModel { HomeViewModel() }
 
-    viewModel { DashboardViewModel(resource = get(), getCoronaSummaryUseCase = get()) }
+    viewModel { DashboardViewModel(resource = get(), getCoronaSummaryUseCase = get(), getGlobalSummaryListUseCase = get()) }
 }

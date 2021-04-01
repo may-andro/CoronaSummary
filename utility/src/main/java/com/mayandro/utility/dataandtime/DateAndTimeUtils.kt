@@ -4,7 +4,7 @@ import com.mayandro.utility.SERVER_DATE_FORMAT
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun String.getTimeLong(locale: Locale): Long? {
+fun String.getTimeLong(): Long? {
     val dateFormat = SimpleDateFormat(SERVER_DATE_FORMAT, Locale.ENGLISH)
     return try {
         val date: Date = dateFormat.parse(this) ?: throw Exception()
@@ -14,12 +14,16 @@ fun String.getTimeLong(locale: Locale): Long? {
     }
 }
 
-fun String.getDate(): String? {
+fun String.getDate(pattern: String = "yyyyMMdd"): String? {
     val dateFormat = SimpleDateFormat(SERVER_DATE_FORMAT, Locale.ENGLISH)
-    val targetFormat = SimpleDateFormat("yyyyMMdd", Locale.ENGLISH)
-    val date: Date? = dateFormat.parse(this)
+    val targetFormat = SimpleDateFormat(pattern, Locale.ENGLISH)
     return try {
-        targetFormat.format(date)
+        val date = dateFormat.parse(this)
+        date?.let {
+            targetFormat.format(date)
+        } ?: kotlin.run {
+            null
+        }
     } catch (e: Exception) {
         null
     }
@@ -32,6 +36,6 @@ fun Long.getTimeDifference(): Long {
     val secondsInMilli: Long = 1000
     val minutesInMilli: Long = secondsInMilli * 60
 
-    var different: Long = currentDate.time - givenDate.time
+    val different: Long = currentDate.time - givenDate.time
     return different / minutesInMilli
 }

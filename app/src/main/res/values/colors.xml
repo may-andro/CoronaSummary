@@ -21,6 +21,9 @@
     <color name="brown">#501515</color>
     <color name="textColorGrey">#848686</color>
 
+    <color name="graphGreen">#FF75B6AA</color>
+    <color name="graphRed">#FFFC3B3B</color>
+
     <array name="color_list">
         <item>#1F6357</item>
         <item>#1BB65D</item>

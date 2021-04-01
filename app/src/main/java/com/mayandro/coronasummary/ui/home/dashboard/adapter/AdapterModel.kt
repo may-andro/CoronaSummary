@@ -1,5 +1,7 @@
 package com.mayandro.coronasummary.ui.home.dashboard.adapter
 
+import com.mayandro.coronasummary.utils.ChartDataModel
+
 data class DashboardCountryModel(
     val backgroundColor: Int,
     val id: String,
@@ -15,4 +17,6 @@ data class DashboardSummaryModel(
     val label2: String,
     val value2: String,
     val percentage: Float,
+    val chartData1: ChartDataModel,
+    val chartData2: ChartDataModel
 )

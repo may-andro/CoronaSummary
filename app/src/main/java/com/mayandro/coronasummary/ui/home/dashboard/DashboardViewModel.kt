@@ -2,97 +2,103 @@ package com.mayandro.coronasummary.ui.home.dashboard
 
 import android.content.res.Resources
 import androidx.lifecycle.*
+import androidx.lifecycle.Transformations.map
 import com.mayandro.coronasummary.R
-import com.mayandro.coronasummary.ui.base.BaseViewModel
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardCountryModel
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardSummaryModel
+import com.mayandro.coronasummary.ui.home.dashboard.utils.toUiList
 import com.mayandro.domain.usecase.GetCoronaSummaryUseCase
-import com.mayandro.remote.model.CountrySummary
-import com.mayandro.remote.model.GlobalSummary
-import com.mayandro.remote.model.SummaryResponse
-import com.mayandro.utility.extensions.getRoughNumber
+import com.mayandro.domain.usecase.GetGlobalSummaryListUseCase
+import com.mayandro.local.entity.CountrySummaryEntity
+import com.mayandro.local.entity.GlobalSummaryEntity
 import com.mayandro.utility.network.NetworkStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.*
 
 class DashboardViewModel(
     private val resource: Resources,
-    private val getCoronaSummaryUseCase: GetCoronaSummaryUseCase
-): BaseViewModel<DashboardInteractor>() {
+    private val getCoronaSummaryUseCase: GetCoronaSummaryUseCase,
+    private val getGlobalSummaryListUseCase: GetGlobalSummaryListUseCase
+) : ViewModel() {
 
-    var summaryResponseLiveData: MutableLiveData<NetworkStatus<SummaryResponse>> = MutableLiveData()
+    private var countriesListLiveData: MutableLiveData<NetworkStatus<List<CountrySummaryEntity>>> =
+        MutableLiveData()
 
-    fun getCoronaSummary() {
-        getCoronaSummaryUseCase(
-            scope = viewModelScope,
-            param = Any(),
-        ) { result ->
-            summaryResponseLiveData.postValue(result)
+    private var globalSummaryListLiveData: MutableLiveData<NetworkStatus<List<GlobalSummaryEntity>>> =
+        MutableLiveData()
+
+    var globalUiListLiveData: LiveData<NetworkStatus<List<DashboardSummaryModel>>> =
+        map(globalSummaryListLiveData) { networkStatus ->
+            when (networkStatus) {
+                is NetworkStatus.Success -> {
+                    NetworkStatus.Success(networkStatus.data?.sortedBy { it.date }?.toUiList(resource))
+                }
+                is NetworkStatus.Error -> {
+                    NetworkStatus.Error(
+                        errorMessage = networkStatus.errorMessage,
+                        networkStatus.data?.sortedBy { it.date }?.toUiList(resource)
+                    )
+                }
+                is NetworkStatus.Loading -> {
+                    NetworkStatus.Loading(networkStatus.data?.sortedBy { it.date }?.toUiList(resource))
+                }
+            }
         }
+
+
+    var countriesUiListLiveData: LiveData<NetworkStatus<List<DashboardCountryModel>>> =
+        map(countriesListLiveData) {
+            val colorList = resource.getIntArray(R.array.color_list).toList()
+            when (it) {
+                is NetworkStatus.Success -> {
+                    NetworkStatus.Success(it.data?.toUiList(colorList))
+                }
+                is NetworkStatus.Error -> {
+                    NetworkStatus.Error(
+                        errorMessage = it.errorMessage,
+                        it.data?.toUiList(colorList)
+                    )
+                }
+                is NetworkStatus.Loading -> {
+                    NetworkStatus.Loading(it.data?.toUiList(colorList))
+                }
+            }
+        }
+
+    init {
+        getCountries()
+        getGlobalSummary()
     }
 
-    fun getUiData(summaryResponse: SummaryResponse, onResult: (List<DashboardSummaryModel>, List<DashboardCountryModel>) -> Unit) {
+    private fun getCountries() {
         viewModelScope.launch {
-            val globalSummary = getPagerUiDataList(summaryResponse.global)
-            val counties = getRecyclerViewListFlow(summaryResponse.countrySummaries)
-
-            globalSummary.zip(counties) { globalSUmmary, countryList ->
-                Pair(globalSUmmary, countryList)
-            }.collect {
-                onResult.invoke(it.first, it.second)
-            }
+            getCoronaSummaryUseCase()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    countriesListLiveData.postValue(it)
+                }
         }
     }
 
-    private fun getPagerUiDataList(globalSummaryDataModel: GlobalSummary): Flow<List<DashboardSummaryModel>> {
-        return flow{
-            val activeCaseSummary = DashboardSummaryModel(
-                label1 = resource.getString(R.string.active_cases),
-                value1 = globalSummaryDataModel.newConfirmed.getRoughNumber(),
-                label2 = resource.getString(R.string.total_cases),
-                value2 = globalSummaryDataModel.totalConfirmed.getRoughNumber(),
-                percentage = ((globalSummaryDataModel.newConfirmed * 100) / globalSummaryDataModel.totalConfirmed).toFloat()
-            )
-
-            val deadCaseSummary = DashboardSummaryModel(
-                label1 = resource.getString(R.string.new_death),
-                value1 = globalSummaryDataModel.newDeaths.getRoughNumber(),
-                label2 = resource.getString(R.string.total_death),
-                value2 = globalSummaryDataModel.totalDeaths.getRoughNumber(),
-                percentage = ((globalSummaryDataModel.totalDeaths * 100) / globalSummaryDataModel.totalConfirmed).toFloat()
-            )
-
-            val recoveredCaseSummary = DashboardSummaryModel(
-                label1 = resource.getString(R.string.new_recovered),
-                value1 = globalSummaryDataModel.newRecovered.getRoughNumber(),
-                label2 = resource.getString(R.string.total_recovered),
-                value2 = globalSummaryDataModel.totalRecovered.getRoughNumber(),
-                percentage = ((globalSummaryDataModel.totalRecovered * 100) / globalSummaryDataModel.totalConfirmed).toFloat()
-            )
-            emit(
-                listOf(recoveredCaseSummary, deadCaseSummary, activeCaseSummary)
-            )
-        }.flowOn(Dispatchers.Default)
+    private fun getGlobalSummary() {
+        viewModelScope.launch {
+            getGlobalSummaryListUseCaseParam()
+                .flatMapLatest { getGlobalSummaryListUseCase(it) }
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    globalSummaryListLiveData.postValue(it)
+                }
+        }
     }
 
-    private fun getRecyclerViewListFlow(countrySummaryList: List<CountrySummary>): Flow<List<DashboardCountryModel>> {
-        return flow{
-            val random = Random()
-            val sortedList = countrySummaryList.sortedByDescending { it.totalConfirmed }
-            val list = sortedList.map {
-                val colorsList = resource.getIntArray(R.array.color_list)
-                DashboardCountryModel(
-                    id = it.id,
-                    country = it.country,
-                    countryCode = it.countryCode,
-                    slug = it.slug,
-                    totalCase = it.totalConfirmed.getRoughNumber(),
-                    backgroundColor = colorsList[random.nextInt(colorsList.size)]
-                )
-            }
-            emit(list)
-        }.flowOn(Dispatchers.Default)
+    private fun getGlobalSummaryListUseCaseParam(): Flow<GetGlobalSummaryListUseCase.Param> {
+        return flow {
+            emit(GetGlobalSummaryListUseCase.Param(
+                from = "2021-03-20T00:00:00Z",
+                to= "2021-03-31T00:00:00Z"
+            ))
+        }
     }
 }
+

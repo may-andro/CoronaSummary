@@ -5,7 +5,7 @@ import com.mayandro.local.entity.GlobalSummaryEntity
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
-    suspend fun insertGlobalSummary(globalSummaryEntity: GlobalSummaryEntity)
+    suspend fun insertGlobalSummary(list: List<GlobalSummaryEntity>)
 
     suspend fun deleteAllGlobalSummary()
 
