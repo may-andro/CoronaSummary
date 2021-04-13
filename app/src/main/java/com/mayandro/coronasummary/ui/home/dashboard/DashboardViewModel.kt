@@ -1,70 +1,28 @@
 package com.mayandro.coronasummary.ui.home.dashboard
 
-import android.content.res.Resources
 import androidx.lifecycle.*
-import androidx.lifecycle.Transformations.map
-import com.mayandro.coronasummary.R
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardCountryModel
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardSummaryModel
-import com.mayandro.coronasummary.ui.home.dashboard.utils.toUiList
+import com.mayandro.coronasummary.ui.home.dashboard.utils.CountryListDataMapper
+import com.mayandro.coronasummary.ui.home.dashboard.utils.UiPagerDataMapper
 import com.mayandro.domain.usecase.GetCoronaSummaryUseCase
 import com.mayandro.domain.usecase.GetGlobalSummaryListUseCase
-import com.mayandro.local.entity.CountrySummaryEntity
-import com.mayandro.local.entity.GlobalSummaryEntity
+import com.mayandro.utility.dataandtime.getServerRequestDate
 import com.mayandro.utility.network.NetworkStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
-    private val resource: Resources,
     private val getCoronaSummaryUseCase: GetCoronaSummaryUseCase,
-    private val getGlobalSummaryListUseCase: GetGlobalSummaryListUseCase
+    private val getGlobalSummaryListUseCase: GetGlobalSummaryListUseCase,
+    private val uiPagerDataMapper: UiPagerDataMapper,
+    private val countryListDataMapper: CountryListDataMapper
 ) : ViewModel() {
 
-    private var countriesListLiveData: MutableLiveData<NetworkStatus<List<CountrySummaryEntity>>> =
-        MutableLiveData()
+    var globalUiListLiveData: MutableLiveData<NetworkStatus<List<DashboardSummaryModel>>> = MutableLiveData()
 
-    private var globalSummaryListLiveData: MutableLiveData<NetworkStatus<List<GlobalSummaryEntity>>> =
-        MutableLiveData()
-
-    var globalUiListLiveData: LiveData<NetworkStatus<List<DashboardSummaryModel>>> =
-        map(globalSummaryListLiveData) { networkStatus ->
-            when (networkStatus) {
-                is NetworkStatus.Success -> {
-                    NetworkStatus.Success(networkStatus.data?.sortedBy { it.date }?.toUiList(resource))
-                }
-                is NetworkStatus.Error -> {
-                    NetworkStatus.Error(
-                        errorMessage = networkStatus.errorMessage,
-                        networkStatus.data?.sortedBy { it.date }?.toUiList(resource)
-                    )
-                }
-                is NetworkStatus.Loading -> {
-                    NetworkStatus.Loading(networkStatus.data?.sortedBy { it.date }?.toUiList(resource))
-                }
-            }
-        }
-
-
-    var countriesUiListLiveData: LiveData<NetworkStatus<List<DashboardCountryModel>>> =
-        map(countriesListLiveData) {
-            val colorList = resource.getIntArray(R.array.color_list).toList()
-            when (it) {
-                is NetworkStatus.Success -> {
-                    NetworkStatus.Success(it.data?.toUiList(colorList))
-                }
-                is NetworkStatus.Error -> {
-                    NetworkStatus.Error(
-                        errorMessage = it.errorMessage,
-                        it.data?.toUiList(colorList)
-                    )
-                }
-                is NetworkStatus.Loading -> {
-                    NetworkStatus.Loading(it.data?.toUiList(colorList))
-                }
-            }
-        }
+    var countriesUiListLiveData: MutableLiveData<NetworkStatus<List<DashboardCountryModel>>> =  MutableLiveData()
 
     init {
         getCountries()
@@ -74,9 +32,38 @@ class DashboardViewModel(
     private fun getCountries() {
         viewModelScope.launch {
             getCoronaSummaryUseCase()
+                .map {
+                    when (it) {
+                        is NetworkStatus.Success -> {
+                            it.data?.let { list ->
+                                NetworkStatus.Success(countryListDataMapper.mapFromOriginalObject(list))
+                            } ?: kotlin.run {
+                                NetworkStatus.Error(
+                                    errorMessage = "Null Response error"
+                                )
+                            }
+
+                        }
+                        is NetworkStatus.Error -> {
+                            NetworkStatus.Error(
+                                errorMessage = it.errorMessage,
+                                it.data?.let { list ->
+                                    countryListDataMapper.mapFromOriginalObject(list)
+                                }
+                            )
+                        }
+                        is NetworkStatus.Loading -> {
+                            NetworkStatus.Loading(
+                                it.data?.let { list ->
+                                    countryListDataMapper.mapFromOriginalObject(list)
+                                }
+                            )
+                        }
+                    }
+                }
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    countriesListLiveData.postValue(it)
+                    countriesUiListLiveData.postValue(it)
                 }
         }
     }
@@ -85,9 +72,37 @@ class DashboardViewModel(
         viewModelScope.launch {
             getGlobalSummaryListUseCaseParam()
                 .flatMapLatest { getGlobalSummaryListUseCase(it) }
+                .map {
+                    when (it) {
+                        is NetworkStatus.Success -> {
+                            it.data?.let { list ->
+                                NetworkStatus.Success(uiPagerDataMapper.mapFromOriginalObject(list))
+                            } ?: kotlin.run {
+                                NetworkStatus.Error(
+                                    errorMessage = "Null Response error"
+                                )
+                            }
+                        }
+                        is NetworkStatus.Error -> {
+                            NetworkStatus.Error(
+                                errorMessage = it.errorMessage,
+                                it.data?.let { list ->
+                                    uiPagerDataMapper.mapFromOriginalObject(list)
+                                }
+                            )
+                        }
+                        is NetworkStatus.Loading -> {
+                            NetworkStatus.Loading(
+                                it.data?.let { list ->
+                                    uiPagerDataMapper.mapFromOriginalObject(list)
+                                }
+                            )
+                        }
+                    }
+                }
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    globalSummaryListLiveData.postValue(it)
+                    globalUiListLiveData.postValue(it)
                 }
         }
     }
@@ -95,8 +110,8 @@ class DashboardViewModel(
     private fun getGlobalSummaryListUseCaseParam(): Flow<GetGlobalSummaryListUseCase.Param> {
         return flow {
             emit(GetGlobalSummaryListUseCase.Param(
-                from = "2021-03-20T00:00:00Z",
-                to= "2021-03-31T00:00:00Z"
+                from = getServerRequestDate(-7),
+                to= getServerRequestDate(0)
             ))
         }
     }

@@ -1,6 +1,6 @@
 package com.mayandro.remote.retrofit
 
-import com.mayandro.remote.model.CountrySummary
+import com.mayandro.remote.model.CountryStatsResponse
 import com.mayandro.remote.model.GlobalSummary
 import com.mayandro.remote.model.SummaryResponse
 import retrofit2.Response
@@ -24,5 +24,5 @@ interface RetrofitApi {
         @Path("countrySlug") countrySlug: String,
         @Query("from") from: String?,
         @Query("to") to: String?,
-    ) : Response<List<CountrySummary>>
+    ) : Response<List<CountryStatsResponse>>
 }

@@ -1,0 +1,25 @@
+<resources>
+    <string name="total_cases">Total Cases</string>
+    <string name="active_cases">Active Cases</string>
+
+    <string name="death">Dead</string>
+    <string name="new_death">New Death</string>
+    <string name="total_death">Total Death</string>
+
+    <string name="recovered">Recovered</string>
+    <string name="new_recovered">New Recovered</string>
+    <string name="total_recovered">Total Recovered</string>
+
+    <string name="affected">Affected</string>
+    <string name="top_countries">Top Countries</string>
+    <string name="read_more">Read More</string>
+    <string name="view_all">View All</string>
+    <string name="corona_symptoms">5 symptoms of COVID-19</string>
+    <string name="title_feature_country_summary">Country Summary</string>
+
+
+
+    <string name="arg_country_background">country_background</string>
+    <string name="arg_country_slug">country_slug</string>
+    <string name="arg_country_total_cases">country_total_cases</string>
+</resources>

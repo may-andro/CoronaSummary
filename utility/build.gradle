@@ -36,10 +36,7 @@ dependencies {
     def kotlinDependencies = rootProject.ext.kotlinDependencies
     implementation kotlinDependencies.kotlin
     implementation kotlinDependencies.coroutines
-
-    def glideDependencies = rootProject.ext.glideDependencies
-    implementation glideDependencies.glide
-
+    
     def koinDependencies = rootProject.ext.koinDependencies
     implementation koinDependencies.koin
 

@@ -30,7 +30,7 @@ ext {
     lifeCycleVersion = '2.3.0'
 
     //Navigation
-    navigationVersion = '2.3.3'
+    navigationVersion = '2.3.4'
 
     //Glide
     glideVersion = '4.12.0'

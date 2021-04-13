@@ -21,7 +21,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -36,9 +36,11 @@ android {
     buildFeatures {
         viewBinding true
     }
+    dynamicFeatures = [':feature_country_summary']
 }
 
 dependencies {
+    implementation project(path: ':uicommon')
     implementation project(path: ':utility')
     implementation project(path: ':datasource')
     implementation project(path: ':remote')

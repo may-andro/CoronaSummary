@@ -13,3 +13,8 @@ fun Long.getRoughNumber(): String {
     return DecimalFormat("#,##0.#").format(this / 1000.0.pow(digitGroups.toDouble()))
         .toString() + "" + units[digitGroups]
 }
+
+fun Long.getFormattedString(): String {
+    val formatter = DecimalFormat("#,###,###")
+    return formatter.format(this)
+}

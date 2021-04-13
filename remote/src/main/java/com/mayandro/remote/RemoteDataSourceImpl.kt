@@ -1,6 +1,6 @@
 package com.mayandro.remote
 
-import com.mayandro.remote.model.CountrySummary
+import com.mayandro.remote.model.CountryStatsResponse
 import com.mayandro.remote.model.GlobalSummary
 import com.mayandro.remote.model.SummaryResponse
 import com.mayandro.remote.retrofit.RetrofitApi
@@ -29,7 +29,7 @@ class RemoteDataSourceImpl(
         countrySlug: String,
         from: String?,
         to: String?
-    ): NetworkStatus<List<CountrySummary>> {
+    ): NetworkStatus<List<CountryStatsResponse>> {
         return safeApiCall {
             retrofit.getCountryCoronaSummary(countrySlug, from, to)
         }

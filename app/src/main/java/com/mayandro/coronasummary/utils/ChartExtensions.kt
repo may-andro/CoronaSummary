@@ -2,6 +2,7 @@ package com.mayandro.coronasummary.utils
 
 import com.github.mikephil.charting.data.Entry
 import com.mayandro.local.entity.GlobalSummaryEntity
+import com.mayandro.uicommon.utils.chart.ChartDataModel
 import com.mayandro.utility.CHART_FORMAT
 import com.mayandro.utility.dataandtime.getDate
 
@@ -102,8 +103,6 @@ fun List<GlobalSummaryEntity>.getRecoveredCaseChartEntries(): Pair<ChartDataMode
     var yAxisMin2 = -1L
 
     this.forEach {
-        println("<top>.getRecoveredCaseChartEntries date ${it.date} ${it.newRecovered}")
-
         xAxisList.add(it.date.getDate(CHART_FORMAT) ?: "")
         //Find Max
         if (yAxisMax < it.newRecovered) yAxisMax = it.newRecovered

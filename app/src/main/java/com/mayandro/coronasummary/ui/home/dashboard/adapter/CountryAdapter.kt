@@ -1,17 +1,12 @@
 package com.mayandro.coronasummary.ui.home.dashboard.adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
 import com.mayandro.coronasummary.R
 import com.mayandro.coronasummary.databinding.ItemCountryBinding
-import com.mayandro.coronasummary.utils.AutoUpdatableAdapter
+import com.mayandro.uicommon.utils.AutoUpdatableAdapter
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -24,7 +19,7 @@ class CountryAdapter() : RecyclerView.Adapter<CountryAdapter.ViewHolder>(), Auto
         }
     }
 
-    private var onItemClickListener: OnItemClickListener? = null
+    var onItemClick: ((DashboardCountryModel) -> Unit)? = null
 
     override fun getItemCount(): Int {
         return dataSet.size
@@ -42,20 +37,12 @@ class CountryAdapter() : RecyclerView.Adapter<CountryAdapter.ViewHolder>(), Auto
         viewHolder.bind(dataSet[position])
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        onItemClickListener = listener
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(item: DashboardCountryModel, position: Int)
-    }
-
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemCountryBinding.bind(view)
 
         init {
-            binding.root.setOnClickListener {
-                onItemClickListener?.onItemClick(dataSet[adapterPosition], adapterPosition)
+            binding.cardView.setOnClickListener {
+                onItemClick?.invoke(dataSet[adapterPosition])
             }
         }
 

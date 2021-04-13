@@ -5,16 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mayandro.coronasummary.R
 import com.mayandro.coronasummary.databinding.FragmentDashboardBinding
-import com.mayandro.coronasummary.ui.base.BaseFragment
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.CountryAdapter
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardCountryModel
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.DashboardSummaryModel
 import com.mayandro.coronasummary.ui.home.dashboard.adapter.SummaryAdapter
-import com.mayandro.utility.extensions.showShortToast
+import com.mayandro.uicommon.base.BaseFragment
+import com.mayandro.uicommon.utils.showShortToast
 import com.mayandro.utility.network.NetworkStatus
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,6 +24,8 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
     private val dashboardViewModel: DashboardViewModel by viewModel()
 
     private var isPortrait: Boolean = true
+
+    private val countryAdapter: CountryAdapter by lazy { CountryAdapter() }
 
     override fun getViewBinding(): FragmentDashboardBinding =
         FragmentDashboardBinding.inflate(layoutInflater)
@@ -54,24 +58,17 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
     private fun handlePagerUiState(networkStatus: NetworkStatus<List<DashboardSummaryModel>>) {
         when (networkStatus) {
             is NetworkStatus.Loading -> {
-                requireActivity().showShortToast("Loading")
+                //requireActivity().showShortToast("Loading")
             }
             is NetworkStatus.Error -> {
                 showAlertDialog(
-                    title = "Error",
+                    title = "Paging Data Error",
                     message = networkStatus.errorMessage?: "Error happened",
-                    positiveButton = "Terminate App",
-                    positiveButtonClickListener = {
-                        requireActivity().finish()
-                    },
-                    negativeButton = "Retry",
-                    negativeButtonClickListener = {
-                    },
-                    isCancellable = false
+                    positiveButton = "Dismiss"
                 )
             }
             is NetworkStatus.Success -> {
-                requireActivity().showShortToast("Success")
+                //requireActivity().showShortToast("Success")
             }
         }
 
@@ -83,24 +80,17 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
     private fun handleListUiState(networkStatus: NetworkStatus<List<DashboardCountryModel>>) {
         when (networkStatus) {
             is NetworkStatus.Loading -> {
-                requireActivity().showShortToast("Loading")
+                //requireActivity().showShortToast("Loading")
             }
             is NetworkStatus.Error -> {
                 showAlertDialog(
-                    title = "Error",
+                    title = "Country List Data Error",
                     message = networkStatus.errorMessage?: "Error happened",
-                    positiveButton = "Terminate App",
-                    positiveButtonClickListener = {
-                        requireActivity().finish()
-                    },
-                    negativeButton = "Retry",
-                    negativeButtonClickListener = {
-                    },
-                    isCancellable = false
+                    positiveButton = "Dismiss"
                 )
             }
             is NetworkStatus.Success -> {
-                requireActivity().showShortToast("Success")
+                //requireActivity().showShortToast("Success")
             }
         }
 
@@ -140,29 +130,18 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
                 false
             )
 
-            adapter = CountryAdapter()
+            adapter = countryAdapter
         }
-    }
 
-    //Dialogs
-    private fun showAlertDialog(
-        title: String,
-        message: String,
-        positiveButton: String,
-        negativeButton: String = "",
-        positiveButtonClickListener: ((View) -> Unit)? = null,
-        negativeButtonClickListener: ((View) -> Unit)? = null,
-        isCancellable: Boolean = true
-    ) {
-        alertDialog.showAlertMessage(
-            requireContext(),
-            title = title,
-            message = message,
-            positiveButton,
-            negativeButton,
-            positiveButtonClickListener,
-            negativeButtonClickListener,
-            isCancellable
-        )
+        countryAdapter.onItemClick = {
+            findNavController().navigate(
+                R.id.action_dashboardFragment_to_countryDetailFragment,
+                bundleOf(
+                    getString(R.string.arg_country_slug) to it.slug,
+                    getString(R.string.arg_country_total_cases) to it.totalCase,
+                    getString(R.string.arg_country_background) to it.backgroundColor
+                )
+            )
+        }
     }
 }

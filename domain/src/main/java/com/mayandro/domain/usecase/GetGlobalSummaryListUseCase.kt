@@ -25,7 +25,7 @@ class GetGlobalSummaryListUseCase(
 
             val localList = getLocalDbData()
 
-            emit(NetworkStatus.Loading(localList))
+            //emit(NetworkStatus.Loading(localList))
 
             val getFromServer = true
 

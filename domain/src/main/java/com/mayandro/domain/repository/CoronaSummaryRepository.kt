@@ -2,7 +2,7 @@ package com.mayandro.domain.repository
 
 import com.mayandro.local.entity.CountrySummaryEntity
 import com.mayandro.local.entity.GlobalSummaryEntity
-import com.mayandro.remote.model.CountrySummary
+import com.mayandro.remote.model.CountryStatsResponse
 import com.mayandro.remote.model.GlobalSummary
 import com.mayandro.remote.model.SummaryResponse
 import com.mayandro.utility.network.NetworkStatus
@@ -19,7 +19,7 @@ interface CoronaSummaryRepository {
         countrySlug: String,
         from: String?,
         to: String?
-    ): NetworkStatus<List<CountrySummary>>
+    ): NetworkStatus<List<CountryStatsResponse>>
 
     suspend fun getGlobalSummaryFromDb(): List<GlobalSummaryEntity>
 

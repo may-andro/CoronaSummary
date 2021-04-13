@@ -13,14 +13,26 @@
 
         <action
             android:id="@+id/action_dashboardFragment_to_countryDetailFragment"
-            app:destination="@id/countryDetailFragment" />
+            app:destination="@id/countryDetailFragment" >
+
+            <argument
+                android:name="@string/arg_country_slug"
+                app:argType="string"/>
+
+            <argument
+                android:name="@string/arg_country_total_cases"
+                app:argType="long"/>
+
+            <argument
+                android:name="@string/arg_country_background"
+                app:argType="integer"/>
+        </action>
     </fragment>
 
     <fragment
+        app:moduleName="feature_country_summary"
         android:id="@+id/countryDetailFragment"
-        android:name="com.mayandro.coronasummary.ui.home.countrydetail.CountryDetailFragment"
-        android:label="CountryDetailFragment"
-        tools:layout="@layout/fragment_country_detail"/>
-
+        android:name="com.mayandro.feature_country_summary.ui.CountryDetailFragment"
+        android:label="CountryDetailFragment"/>
 
 </navigation>

@@ -23,7 +23,7 @@ class GetCoronaSummaryUseCase(
             //Get DB Data
             val localCountrySummaryList = getLocalDbData()
 
-            emit(NetworkStatus.Loading(localCountrySummaryList))
+            //emit(NetworkStatus.Loading(localCountrySummaryList))
 
             val getFromServer = shouldFetchFromServer(localCountrySummaryList)
 

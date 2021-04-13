@@ -1,6 +1,6 @@
 package com.mayandro.coronasummary.ui.home.dashboard.adapter
 
-import com.mayandro.coronasummary.utils.ChartDataModel
+import com.mayandro.uicommon.utils.chart.ChartDataModel
 
 data class DashboardCountryModel(
     val backgroundColor: Int,

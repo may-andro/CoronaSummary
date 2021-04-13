@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mayandro.coronasummary.R
 import com.mayandro.coronasummary.databinding.LayoutGlobalSummaryBinding
-import com.mayandro.coronasummary.utils.AutoUpdatableAdapter
-import com.mayandro.coronasummary.utils.ChartUtils
+import com.mayandro.uicommon.utils.AutoUpdatableAdapter
+import com.mayandro.uicommon.utils.chart.ChartUtils
 import kotlin.properties.Delegates
 
 class SummaryAdapter : RecyclerView.Adapter<SummaryAdapter.ViewHolder>(), AutoUpdatableAdapter {

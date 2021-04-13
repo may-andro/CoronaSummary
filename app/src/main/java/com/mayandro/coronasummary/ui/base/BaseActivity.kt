@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
-import com.mayandro.coronasummary.utils.DialogUtils
+import com.mayandro.uicommon.utils.dialog.DialogUtils
 
 abstract class BaseActivity<B : ViewBinding>() : AppCompatActivity() {
     abstract fun getViewBinding(): B
