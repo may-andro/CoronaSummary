@@ -88,6 +88,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
+        android:background="?attr/selectableItemBackground"
         app:layout_constraintBottom_toTopOf="@id/textReadMore"
         app:layout_constraintEnd_toStartOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@id/guidelineCenter"
@@ -96,16 +97,19 @@
 
     <TextView
         android:id="@+id/textReadMore"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="start|center_vertical"
         android:text="Read More"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/colorPrimaryDark"
+        android:background="?attr/selectableItemBackground"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@id/viewSymptomsBackground"
         app:layout_constraintEnd_toStartOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@id/guidelineCenter"
         app:layout_constraintTop_toBottomOf="@id/textSymptom"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintWidth_percent="0.4" />
 
     <androidx.core.widget.NestedScrollView

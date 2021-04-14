@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,59 +44,22 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.colorSecondary)
+
         setUpCountryRecyclerView()
         setUpPagerView()
+        setUpReadMore()
 
-        dashboardViewModel.countriesUiListLiveData.observe(viewLifecycleOwner) {
-            handleListUiState(it)
+        dashboardViewModel.successCountryListState.observe(viewLifecycleOwner) {
+            (binding.recyclerViewCountries.adapter as CountryAdapter).dataSet = it
         }
 
-        dashboardViewModel.globalUiListLiveData.observe(viewLifecycleOwner) {
-            handlePagerUiState(it)
-        }
-    }
-
-    private fun handlePagerUiState(networkStatus: NetworkStatus<List<DashboardSummaryModel>>) {
-        when (networkStatus) {
-            is NetworkStatus.Loading -> {
-                //requireActivity().showShortToast("Loading")
-            }
-            is NetworkStatus.Error -> {
-                showAlertDialog(
-                    title = "Paging Data Error",
-                    message = networkStatus.errorMessage?: "Error happened",
-                    positiveButton = "Dismiss"
-                )
-            }
-            is NetworkStatus.Success -> {
-                //requireActivity().showShortToast("Success")
-            }
+        dashboardViewModel.successDashboardSummaryState.observe(viewLifecycleOwner) {
+            (binding.viewPagerSummary.adapter as SummaryAdapter).dataSet = it
         }
 
-        networkStatus.data?.let { list ->
-            (binding.viewPagerSummary.adapter as SummaryAdapter).dataSet = list
-        }
-    }
-
-    private fun handleListUiState(networkStatus: NetworkStatus<List<DashboardCountryModel>>) {
-        when (networkStatus) {
-            is NetworkStatus.Loading -> {
-                //requireActivity().showShortToast("Loading")
-            }
-            is NetworkStatus.Error -> {
-                showAlertDialog(
-                    title = "Country List Data Error",
-                    message = networkStatus.errorMessage?: "Error happened",
-                    positiveButton = "Dismiss"
-                )
-            }
-            is NetworkStatus.Success -> {
-                //requireActivity().showShortToast("Success")
-            }
-        }
-
-        networkStatus.data?.let { list ->
-            (binding.recyclerViewCountries.adapter as CountryAdapter).dataSet = list
+        dashboardViewModel.errorState.observe(viewLifecycleOwner) {
+            showErrorDialog(it)
         }
     }
 
@@ -143,5 +107,33 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
                 )
             )
         }
+    }
+
+    private fun setUpReadMore() {
+        binding.textReadMore.setOnClickListener {
+            showUpdateDialog()
+        }
+
+        binding.imageInfo.setOnClickListener {
+            showUpdateDialog()
+        }
+    }
+
+    //Dialog
+    private fun showUpdateDialog() {
+        alertDialog.showAlertMessage(
+            context = requireContext(),
+            title = "Coming soon...",
+            message = "This feature is coming soon. Stay tuned.",
+            positiveButton = "Dismiss"
+        )
+    }
+
+    private fun showErrorDialog(error: String) {
+        showAlertDialog(
+            title = "Api Error",
+            message = error,
+            positiveButton = "Dismiss"
+        )
     }
 }

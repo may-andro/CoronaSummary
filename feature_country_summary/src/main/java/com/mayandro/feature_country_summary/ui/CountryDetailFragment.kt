@@ -70,6 +70,7 @@ class CountryDetailFragment: BaseFragment<FragmentCountryDetailBinding>() {
         arguments?.getInt(getString(mainResource.string.arg_country_background))?.let {
             binding.motionLayout.setBackgroundColor(it)
             countryStatsAdapter.backgroundColor = it
+            requireActivity().window.statusBarColor = it
         }
 
         arguments?.getString(getString(mainResource.string.arg_country_slug))?.let {

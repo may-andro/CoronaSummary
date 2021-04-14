@@ -96,12 +96,14 @@
 
     <TextView
         android:id="@+id/textReadMore"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="start|center_vertical"
         android:text="Read More"
+        android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/colorPrimaryDark"
+        android:background="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="@id/viewSymptomsBackground"
         app:layout_constraintEnd_toEndOf="@id/textSymptom"
         app:layout_constraintStart_toStartOf="@id/textSymptom"
